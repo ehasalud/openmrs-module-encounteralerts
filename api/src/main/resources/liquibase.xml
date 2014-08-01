@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <!--
+        See http://www.liquibase.org/manual/home#available_database_refactorings
+        for a list of supported elements and attributes
+    -->
+    
+    <changeSet id="encounteralerts_20140731_1235" author="vgarciabnz">
+        
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="encounter_alert"/></not>
+        </preConditions>
+        
+        <createTable tableName="encounter_alert">
+            
+            <column name="encounter_alert_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            
+            <column name="name" type="VARCHAR(255)">
+            	<constraints nullable="false"/>
+            </column>
+            
+            <column name="description" type="VARCHAR(5000)">
+            </column>
+            
+            <column name="up_query" type="VARCHAR(36)">
+            	<constraints nullable="false"/>
+           	</column>
+            
+            <column name="down_query" type="VARCHAR(36)">
+            </column>
+            
+            <column name="creator" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="uuid" type="VARCHAR(36)">
+            	<constraints nullable="false"/>
+           	</column>
+            
+        </createTable>
+        
+    </changeSet>
+    
+    <!--  
+    <changeSet author="vgarciabnz" id="encounteralerts_20140731_1242">
+        
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="encounter_alert_users"/></not>
+        </preConditions>
+        
+        <createTable tableName="encounter_alert_users">
+            
+            <column name="encounter_alert_users_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            
+            <column name="encounter_alert_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="user" type="VARCHAR(50)">
+            	<constraints nullable="false"/>
+           	</column>
+            
+            <column name="uuid" type="VARCHAR(36)">
+            	<constraints nullable="false"/>
+           	</column>
+            
+        </createTable>
+        
+    </changeSet>
+    -->
+    
+    <changeSet author="vgarciabnz" id="encounteralerts_20140731_1250">
+        
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="encounter_alert_roles"/></not>
+        </preConditions>
+        
+        <createTable tableName="encounter_alert_roles">
+            
+            <column name="encounter_alert_roles_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            
+              
+            <column name="encounter_alert_uuid" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="role" type="VARCHAR(50)">
+            	<constraints nullable="false"/>
+            </column>
+            
+            <column name="uuid" type="VARCHAR(36)">
+            	<constraints nullable="false"/>
+           	</column>
+            
+        </createTable>
+        
+    </changeSet>
+    
+</databaseChangeLog>

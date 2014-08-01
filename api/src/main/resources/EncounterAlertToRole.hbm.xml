@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.openmrs.module.encounteralerts">
+
+
+	<class name="EncounterAlertToRole" table="encounter_alert_roles">
+	    
+		<id name="id" type="int" column="encounter_alert_roles_id" unsaved-value="0">
+			<generator class="native" />
+		</id>
+		 
+		<many-to-one name="encounterAlert" class="org.openmrs.module.encounteralerts.EncounterAlert" 
+		    not-null="true" property-ref="uuid">
+		    <column name="encounter_alert_uuid" />
+		</many-to-one>
+		
+		<many-to-one name="role" class="org.openmrs.Role" not-null="true">
+			<column name="role" />
+		</many-to-one>
+				
+		<property name="uuid" type="java.lang.String" column="uuid"
+			length="38" unique="true" />
+		
+	</class>
+
+</hibernate-mapping>
