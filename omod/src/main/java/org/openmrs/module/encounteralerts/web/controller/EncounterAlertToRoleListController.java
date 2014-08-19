@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.encounteralerts.EncounterAlert;
 import org.openmrs.module.encounteralerts.EncounterAlertToRole;
+import org.openmrs.module.encounteralerts.EvaluatedEncounter;
 import org.openmrs.module.encounteralerts.api.EncounterAlertsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,7 +24,7 @@ public class EncounterAlertToRoleListController {
 protected final Log log = LogFactory.getLog(getClass());
 	
 	@RequestMapping(method = RequestMethod.GET)
-	protected void initForm() {
+	protected void initForm() {		
 	}
 	
 	@ModelAttribute("encounterAlertsToRole")

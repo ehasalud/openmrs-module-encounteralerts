@@ -43,6 +43,10 @@
 		<point>org.openmrs.admin.list</point>
 		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.AdminList</class>
 	</extension>
+	<extension>
+		<point>org.openmrs.gutter.tools</point>
+		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.GutterListExt</class>
+	</extension>
 	
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>

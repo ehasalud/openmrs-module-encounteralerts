@@ -13,9 +13,16 @@
  */
 package org.openmrs.module.encounteralerts.api.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import org.openmrs.Encounter;
 import org.openmrs.Role;
+import org.openmrs.api.SerializationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.db.SerializedObject;
 import org.openmrs.api.db.SerializedObjectDAO;
 import org.openmrs.api.impl.BaseOpenmrsService;
@@ -23,9 +30,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.encounteralerts.EncounterAlert;
 import org.openmrs.module.encounteralerts.EncounterAlertToRole;
+import org.openmrs.module.encounteralerts.EvaluatedEncounter;
 import org.openmrs.module.encounteralerts.api.EncounterAlertsService;
 import org.openmrs.module.encounteralerts.api.db.EncounterAlertsDAO;
+import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
+import org.openmrs.module.reporting.query.encounter.EncounterQueryResult;
 import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
+import org.openmrs.module.reporting.query.encounter.service.EncounterQueryService;
+import org.openmrs.module.reporting.serializer.ReportingSerializer;
+import org.openmrs.serialization.SerializationException;
 
 /**
  * It is a default implementation of {@link EncounterAlertsService}.
@@ -85,8 +99,14 @@ public class EncounterAlertsServiceImpl extends BaseOpenmrsService implements En
 
 	@Override
 	public List<EncounterAlert> getCurrentUserEncounterAlerts() {
-		// TODO Auto-generated method stub
-		return null;
+		if (!Context.isAuthenticated())
+			return null;
+		Set<Role> roles = Context.getAuthenticatedUser().getAllRoles();
+		List<EncounterAlert> ret = new ArrayList<EncounterAlert>();
+		for (Role role : roles)
+			ret.addAll(getEncounterAlertsByRole(role));
+		log.debug("current user has " + ret.size() + " encounter alerts");
+		return ret;		
 	}
 
 	@Override
@@ -140,6 +160,63 @@ public class EncounterAlertsServiceImpl extends BaseOpenmrsService implements En
 	@Override
 	public EncounterAlert getEncounterAlertByUuid(String uuid) {
 		return dao.getEncounterAlertByUuid(uuid);
+	}
+
+	@Override
+	public List<EvaluatedEncounter> evaluateCurrentUserEncounterAlert(
+			EncounterAlert alert) {
+		// TODO - Filter by patientf
+		
+		List<EvaluatedEncounter> encounters = new ArrayList<EvaluatedEncounter>();
+		
+		SerializationService soService = Context.getSerializationService();
+		
+		EncounterQuery upQuery;
+		EncounterQuery downQuery;
+		try {
+			upQuery = soService.deserialize(alert.getUpQuery().getSerializedData(), 
+					EncounterQuery.class, ReportingSerializer.class);
+			
+			EncounterQueryService eqService = Context.getService(EncounterQueryService.class);
+			
+			EncounterQueryResult upResult = eqService.evaluate(upQuery, null);
+			
+			if(alert.getDownQuery() != null){
+				downQuery = soService.deserialize(alert.getDownQuery().getSerializedData(), 
+						EncounterQuery.class, ReportingSerializer.class);
+				
+				EncounterQueryResult downResult = eqService.evaluate(downQuery, null);
+				
+				upResult.getMemberIds().removeAll(downResult.getMemberIds());
+				
+				for (Integer i : downResult.getMemberIds()){
+					// TODO - Improve method
+					if (i != null){
+						Encounter e = Context.getEncounterService().getEncounter(i);
+						if (e != null){
+							encounters.add(new EvaluatedEncounter(e, EvaluatedEncounter.CHECKED));
+						}
+					}
+				}
+			}
+			
+			for (Integer i : upResult.getMemberIds()){
+				if (i != null){
+					Encounter e = Context.getEncounterService().getEncounter(i);
+					if (e != null){
+					encounters.add(new EvaluatedEncounter(e, EvaluatedEncounter.TO_BE_CHECKED));
+					}
+				}
+			}
+			return encounters;
+		} catch (SerializationException e) {
+			e.printStackTrace();
+		} catch (EvaluationException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+		
 	}
 
 }

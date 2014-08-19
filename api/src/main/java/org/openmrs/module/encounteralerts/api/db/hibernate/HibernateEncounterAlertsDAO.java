@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Role;
@@ -79,9 +80,12 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 
 	@Override
 	public List<EncounterAlert> getEncounterAlertsByRole(Role role) throws DAOException {
-		Criteria crit = getSessionFactory().getCurrentSession().createCriteria(EncounterAlert.class);
-		crit.add(Restrictions.eq("role", role));
-		return crit.list();
+		Query q = getSessionFactory().getCurrentSession()
+				.createQuery("select encounterAlert from EncounterAlertToRole where role = :role");
+		q.setEntity("role", role);
+		List<EncounterAlert> alerts = q.list();
+
+		return alerts;
 	}
 
 	@Override

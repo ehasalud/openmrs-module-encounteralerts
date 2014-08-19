@@ -20,6 +20,7 @@ import org.openmrs.api.OpenmrsService;
 import org.openmrs.api.db.SerializedObject;
 import org.openmrs.module.encounteralerts.EncounterAlert;
 import org.openmrs.module.encounteralerts.EncounterAlertToRole;
+import org.openmrs.module.encounteralerts.EvaluatedEncounter;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -50,6 +51,8 @@ public interface EncounterAlertsService extends OpenmrsService {
 	public List<EncounterAlert> getEncounterAlertsByRole(Role role);
 	
 	public List<EncounterAlert> getCurrentUserEncounterAlerts();
+	
+	public List<EvaluatedEncounter> evaluateCurrentUserEncounterAlert(EncounterAlert alert);
 
 	public void createEncounterAlertToRole(EncounterAlertToRole alert);
 	
