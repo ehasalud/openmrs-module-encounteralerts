@@ -2,25 +2,49 @@
 <%@ include file="/WEB-INF/template/header.jsp" %>
 <style type="text/css">
 <!--
-#alertTabs li { 
-	display:inline; 
-	border-top: .2em;
-	border-left: .2em;
-	border-right: .2em;
+
+#alertTabs {
+font-size: 0.8em;
+	margin: 10px auto 7px auto;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-bottom: 2px;
+	border-bottom: 1px solid navy;
+	width: 99%;
+}
+
+#alertTabs ul, #alertTabs li { 
+	display: inline;
+	list-style-type: none;
+	padding: 0px 0px 0px 0px;
 }	
-#alertTabs ul li {
-	display: inline-block;
-	clear: none;
-	float: left;
-	border-top: .2em;
-	border-left: .2em;
-	border-right: .2em;
-	padding-left: 14px;
-	border-bottom: thick solid #69EC88;
+
+#alertTabs a:hover {
+	text-decoration: underline;
 }
-.current {
-	background-color: #69EC88;
+
+#alertTabs a:link, #alertTabs a:visited {
+	border: 1px solid navy;
+	font-size: small;
+	font-weight: bold;
+	margin-right: 8px;
+	padding: 2px 10px 2px 10px;
+	text-decoration: none;
+	color: navy;
+	background: #E0E0F0;
 }
+
+#alertTabs a:link.active, #alertTabs a:visited.active {
+	border-bottom: 1px solid #FFFFFF;
+}
+
+#alertTabs a.current, #alertTabs a:link.current, #alertTabs a:visited.current, #alertTabs a.current:hover {
+	background: #FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
+	color: navy;
+	text-decoration: none;
+}
+
 table.encounterList td{
 	border-width: 2px;
 	border-color: #666666;

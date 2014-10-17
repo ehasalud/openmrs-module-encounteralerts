@@ -9,7 +9,6 @@
 
 <openmrs:require privilege="Manage Encounter Alerts" otherwise="/login.htm" redirect="/module/encounteralerts/encounterAlertList.form" />
 
-<h3><spring:message code="encounteralerts.current"/></h3>
 <c:if test="${fn:length(encounterAlertsToRole) == 0}">
 	<spring:message code="general.none"/>
 </c:if>

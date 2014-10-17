@@ -48,6 +48,12 @@
 		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.GutterListExt</class>
 	</extension>
 	
+	<!-- Adds privileges to manage the module -->
+	<privilege>
+		<name>Manage Encounter Alerts</name>
+		<description>Enables one to add/create/edit encounter alerts as well as asign them to roles.</description>
+	</privilege>
+	
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>
 		EncounterAlert.hbm.xml
