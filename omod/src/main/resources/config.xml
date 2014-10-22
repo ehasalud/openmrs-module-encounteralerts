@@ -48,6 +48,12 @@
 		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.GutterListExt</class>
 	</extension>
 	
+	<!-- Adds advice points -->
+	<advice>
+		<point>org.openmrs.module.reporting.definition.service.SerializedDefinitionService</point>
+		<class>${project.parent.groupId}.${project.parent.artifactId}.advice.PurgeDefinitionAdvisor</class>
+	</advice>
+	
 	<!-- Adds privileges to manage the module -->
 	<privilege>
 		<name>Manage Encounter Alerts</name>

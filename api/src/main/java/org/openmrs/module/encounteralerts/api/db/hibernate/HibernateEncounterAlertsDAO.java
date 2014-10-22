@@ -11,6 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
+
 package org.openmrs.module.encounteralerts.api.db.hibernate;
 
 import java.util.List;
@@ -23,9 +24,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Role;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.api.db.SerializedObject;
 import org.openmrs.module.encounteralerts.EncounterAlert;
 import org.openmrs.module.encounteralerts.EncounterAlertToRole;
 import org.openmrs.module.encounteralerts.api.db.EncounterAlertsDAO;
+import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
 
 /**
  * It is a default implementation of  {@link EncounterAlertsDAO}.
@@ -63,8 +66,16 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 
 	@Override
 	public void deleteEncounterAlert(EncounterAlert encounterAlert) throws DAOException {
-		getSessionFactory().getCurrentSession().delete(encounterAlert);
+		List<EncounterAlertToRole> ear = getSessionFactory().getCurrentSession()
+			.createQuery("FROM EncounterAlertToRole WHERE encounterAlert=:encounterAlert")
+			.setParameter("encounterAlert", encounterAlert)
+			.list();
+
+		for (EncounterAlertToRole e : ear){
+			e.setRetired(true);
+		}
 		
+		getSessionFactory().getCurrentSession().delete(encounterAlert);		
 	}
 
 	@Override
@@ -79,10 +90,11 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 	}
 
 	@Override
-	public List<EncounterAlert> getEncounterAlertsByRole(Role role) throws DAOException {
+	public List<EncounterAlert> getEncounterAlertsByRole(Role role, Boolean includeRetired) throws DAOException {
 		Query q = getSessionFactory().getCurrentSession()
-				.createQuery("select encounterAlert from EncounterAlertToRole where role = :role");
+				.createQuery("select encounterAlert from EncounterAlertToRole EAR where EAR.role = :role AND EAR.retired=:retired");
 		q.setEntity("role", role);
+		q.setParameter("retired", includeRetired);
 		List<EncounterAlert> alerts = q.list();
 
 		return alerts;
@@ -127,4 +139,33 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 		}
 		return ret;
 	}
+
+	@Override
+	public void retireAlertsWithQuery(EncounterQuery eq) {
+		
+		/** Create a SerializedObject with the same uuid*/
+		SerializedObject so = new SerializedObject();
+		so.setUuid(eq.getUuid());
+		Query selectQuery = getSessionFactory().getCurrentSession()
+				.createQuery("FROM EncounterAlert EA WHERE (EA.upQuery=:query OR EA.downQuery=:query)");
+		selectQuery.setParameter("query", so);
+		
+		List<EncounterAlert> encountersAlerts = selectQuery.list();
+		
+		for (EncounterAlert ea : encountersAlerts){
+			ea.setRetired(true);
+		}
+		
+		/** Retire encounterAlertsToRole associated to encounterAlerts */
+		Query selectQuery2 = getSessionFactory().getCurrentSession()
+				.createQuery("FROM EncounterAlertToRole WHERE encounterAlert IN :encounterAlert");
+		selectQuery2.setParameterList("encounterAlert", encountersAlerts);
+		
+		List<EncounterAlertToRole> encounterAlertsToRole = selectQuery2.list();
+		
+		for (EncounterAlertToRole ear : encounterAlertsToRole){
+			ear.setRetired(true);
+		}
+	}
+
 }

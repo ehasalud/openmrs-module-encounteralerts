@@ -109,7 +109,7 @@ function changeTab(tabObj) {
 </div>
 
 <br>
-<br>
+
 
 <div id="alertContent">
 	<c:choose>
@@ -117,11 +117,16 @@ function changeTab(tabObj) {
 			<c:forEach var="encounterAlert" items="${encounterAlertList}">
 				<div id="alert${encounterAlert.id}" >
 					
+					<b class="boxHeader"><spring:message code="encounteralerts.viewer.list"/></b>
+					<div class="box">
 					<c:choose>
 						<c:when test="${fn:length(encounterListByAlert[encounterAlert]) > 0}">
-							<table class="encounterList">
+							<table class="encounterList" width="100%">
 								<tr>
 									<th><spring:message code="general.name" /></th>
+									<th><spring:message code="Encounter.datetime" /></th>
+									<th><spring:message code="Encounter.location" /></th>
+									<th><spring:message code="Encounter.type"/></th>
 									<th><spring:message code="encounteralerts.viewer.state" /></th>
 									<th><spring:message code="Encounter.title" /></th>
 								</tr>	
@@ -129,6 +134,9 @@ function changeTab(tabObj) {
 								<c:forEach var="encounter" items="${encounterListByAlert[encounterAlert]}">
 									<tr>
 										<td>${encounter.encounter.patient.personName }</td>
+										<td>${encounter.encounter.encounterDatetime }</td>
+										<td>${encounter.encounter.location }</td>
+										<td>${encounter.encounter.encounterType.name }</td>
 										<c:choose>
 											<c:when test="${encounter.state == 1 }">
 												<td bgcolor="#EF6464"><spring:message code="encounteralerts.viewer.pending" /></td>
@@ -147,6 +155,7 @@ function changeTab(tabObj) {
 							<i><spring:message code="encounteralerts.viewer.noencounters" /></i>
 						</c:otherwise>
 					</c:choose>
+					</div>
 				</div>
 			</c:forEach>
 		</c:when>

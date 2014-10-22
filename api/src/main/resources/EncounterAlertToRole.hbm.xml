@@ -11,6 +11,8 @@
 		<id name="id" type="int" column="encounter_alert_roles_id" unsaved-value="0">
 			<generator class="native" />
 		</id>
+		
+		<property name="retired" type="java.lang.Boolean" column="retired"/>
 		 
 		<many-to-one name="encounterAlert" class="org.openmrs.module.encounteralerts.EncounterAlert" 
 		    not-null="true" property-ref="uuid">

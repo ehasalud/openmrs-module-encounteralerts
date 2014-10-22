@@ -14,8 +14,6 @@
 package org.openmrs.module.encounteralerts.api.impl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +31,6 @@ import org.openmrs.module.encounteralerts.EncounterAlertToRole;
 import org.openmrs.module.encounteralerts.EvaluatedEncounter;
 import org.openmrs.module.encounteralerts.api.EncounterAlertsService;
 import org.openmrs.module.encounteralerts.api.db.EncounterAlertsDAO;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.query.encounter.EncounterQueryResult;
 import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
@@ -93,18 +90,18 @@ public class EncounterAlertsServiceImpl extends BaseOpenmrsService implements En
 	}
 
 	@Override
-	public List<EncounterAlert> getEncounterAlertsByRole(Role role) {
-		return dao.getEncounterAlertsByRole(role);
+	public List<EncounterAlert> getEncounterAlertsByRole(Role role, Boolean includeRetired) {
+		return dao.getEncounterAlertsByRole(role, includeRetired);
 	}
 
 	@Override
-	public List<EncounterAlert> getCurrentUserEncounterAlerts() {
+	public List<EncounterAlert> getCurrentUserEncounterAlerts(Boolean includeRetired) {
 		if (!Context.isAuthenticated())
 			return null;
 		Set<Role> roles = Context.getAuthenticatedUser().getAllRoles();
 		List<EncounterAlert> ret = new ArrayList<EncounterAlert>();
 		for (Role role : roles)
-			ret.addAll(getEncounterAlertsByRole(role));
+			ret.addAll(getEncounterAlertsByRole(role, includeRetired));
 		log.debug("current user has " + ret.size() + " encounter alerts");
 		return ret;		
 	}
@@ -217,6 +214,11 @@ public class EncounterAlertsServiceImpl extends BaseOpenmrsService implements En
 		
 		return null;
 		
+	}
+
+	@Override
+	public void retireAlertsWithQuery(EncounterQuery eq) {
+		dao.retireAlertsWithQuery(eq);
 	}
 
 }

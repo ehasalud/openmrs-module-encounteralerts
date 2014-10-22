@@ -16,6 +16,8 @@
 		
 		<property name="description" type="java.lang.String" column="description" not-null="true"/>
 		
+		<property name="retired" type="java.lang.Boolean" column="retired"/>
+		
 		<many-to-one name="upQuery" class="org.openmrs.api.db.SerializedObject" not-null="true"
 		    property-ref="uuid">
 		    <column name="up_query" />

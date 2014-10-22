@@ -110,4 +110,24 @@
         
     </changeSet>
     
+    <changeSet author="vgarciabnz" id="encounteralerts_20141021_1715">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="encounter_alert" columnName="retired"/></not>
+        </preConditions>
+        
+        <addColumn tableName="encounter_alert">
+            <column name="retired" type="BOOLEAN"></column>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet author="vgarciabnz" id="encounteralerts_20141021_1720">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="encounter_alert_roles" columnName="retired"/></not>
+        </preConditions>
+        
+        <addColumn tableName="encounter_alert_roles">
+            <column name="retired" type="BOOLEAN"></column>
+        </addColumn>
+    </changeSet>
+    
 </databaseChangeLog>

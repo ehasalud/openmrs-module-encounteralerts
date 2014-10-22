@@ -19,16 +19,17 @@ import org.openmrs.Role;
 import org.openmrs.module.encounteralerts.EncounterAlert;
 import org.openmrs.module.encounteralerts.EncounterAlertToRole;
 import org.openmrs.module.encounteralerts.api.EncounterAlertsService;
+import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
 
 /**
  *  Database methods for {@link EncounterAlertsService}.
  */
 public interface EncounterAlertsDAO {
 	
-public void createEncounterAlert(EncounterAlert encounterAlert);
+	public void createEncounterAlert(EncounterAlert encounterAlert);
 	
 	public void updateEncounterAlert(EncounterAlert encounterAlert);
-	
+		
 	public void deleteEncounterAlert(EncounterAlert encounterAlert);
 		
 	public EncounterAlert getEncounterAlert(Integer id);
@@ -37,15 +38,17 @@ public void createEncounterAlert(EncounterAlert encounterAlert);
 	
 	public List<EncounterAlert> getAllEncounterAlerts();
 	
-	public List<EncounterAlert> getEncounterAlertsByRole(Role role);
+	public List<EncounterAlert> getEncounterAlertsByRole(Role role, Boolean includeRetired);
 	
 	public void createEncounterAlertToRole(EncounterAlertToRole alert);
 	
 	public void updateEncounterAlertToRole(EncounterAlertToRole alert);
-	
+		
 	public void deleteEncounterAlertToRole(EncounterAlertToRole alert);
 
 	public EncounterAlertToRole getEncounterAlertToRole(Integer id);
 	
 	public List<EncounterAlertToRole> getAllEncounterAlertsToRole();
+	
+	public void retireAlertsWithQuery(EncounterQuery eq);
 }

@@ -21,6 +21,7 @@ import org.openmrs.api.db.SerializedObject;
 import org.openmrs.module.encounteralerts.EncounterAlert;
 import org.openmrs.module.encounteralerts.EncounterAlertToRole;
 import org.openmrs.module.encounteralerts.EvaluatedEncounter;
+import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -39,7 +40,7 @@ public interface EncounterAlertsService extends OpenmrsService {
 	public void createEncounterAlert(EncounterAlert encounterAlert);
 	
 	public void updateEncounterAlert(EncounterAlert encounterAlert);
-	
+		
 	public void deleteEncounterAlert(EncounterAlert encounterAlert);
 		
 	public EncounterAlert getEncounterAlert(Integer id);
@@ -48,16 +49,16 @@ public interface EncounterAlertsService extends OpenmrsService {
 	
 	public List<EncounterAlert> getAllEncounterAlerts();
 	
-	public List<EncounterAlert> getEncounterAlertsByRole(Role role);
+	public List<EncounterAlert> getEncounterAlertsByRole(Role role, Boolean includeRetired);
 	
-	public List<EncounterAlert> getCurrentUserEncounterAlerts();
+	public List<EncounterAlert> getCurrentUserEncounterAlerts(Boolean includeRetired);
 	
 	public List<EvaluatedEncounter> evaluateCurrentUserEncounterAlert(EncounterAlert alert);
 
 	public void createEncounterAlertToRole(EncounterAlertToRole alert);
 	
 	public void updateEncounterAlertToRole(EncounterAlertToRole alert);
-	
+		
 	public void deleteEncounterAlertToRole(EncounterAlertToRole alert);
 	
 	public EncounterAlertToRole getEncounterAlertToRole(Integer id);
@@ -69,5 +70,7 @@ public interface EncounterAlertsService extends OpenmrsService {
 	public SerializedObject getEncounterQueryByUuid(String uuid);
 	
 	public SerializedObject getEncounterQuery(Integer id);
+	
+	public void retireAlertsWithQuery(EncounterQuery eq);
 	
 }
