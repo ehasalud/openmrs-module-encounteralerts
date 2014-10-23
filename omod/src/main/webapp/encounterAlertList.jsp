@@ -2,13 +2,7 @@
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
 <%@ include file="template/localHeader.jsp"%>
-<style>
 
- table { 
-  border-collapse:collapse; 
- }
-
-</style>
 <h2>
 	<spring:message code="encounteralerts.title" />
 </h2>
@@ -16,17 +10,19 @@
 <openmrs:require privilege="Manage Encounter Alerts" otherwise="/login.htm" redirect="/module/encounteralerts/encounterAlertList.form" />
 
 <b class="boxHeader"><spring:message code="encounteralerts.current"/></b>
+
 <div class="box">
 	<c:if test="${fn:length(encounterAlerts) == 0}">
 		<spring:message code="general.none"/>
 	</c:if>
+	
 	<c:if test="${fn:length(encounterAlerts) != 0}">
 		<form method="post">
-			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<table>
 				<thead>
 				<tr>
 					<th></th>
-					<th><spring:message code="general.edit"/></th>
+					<th></th>
 					<th><spring:message code="general.id"/></th>
 					<th><spring:message code="encounteralerts.alert.name"/></th>
 					<th><spring:message code="encounteralerts.alert.description"/></th>

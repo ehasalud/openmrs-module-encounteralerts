@@ -14,6 +14,8 @@
 package org.openmrs.module.encounteralerts.api.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -205,6 +207,9 @@ public class EncounterAlertsServiceImpl extends BaseOpenmrsService implements En
 					}
 				}
 			}
+			
+			// Order the list before returning
+			Collections.sort(encounters, Collections.reverseOrder());
 			return encounters;
 		} catch (SerializationException e) {
 			e.printStackTrace();

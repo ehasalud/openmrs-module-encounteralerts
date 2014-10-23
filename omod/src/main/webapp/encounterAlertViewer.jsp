@@ -54,7 +54,7 @@ table.encounterList td{
 
 <script type="text/javascript">
 
-//initTabs
+/** initTabs */
 $j(document).ready(function() {
 	var tabs = document.getElementById("alertTabs").getElementsByTagName("a");
 	if (tabs.length && tabs[0].id){
@@ -89,6 +89,21 @@ function changeTab(tabObj) {
 }
 </script>
 
+<script>
+$j(document).ready(function () {
+
+	$j("#hideRevised").change(function () {
+		if($j(this).is(':checked')){
+		     $j(".revised").hide();	
+		}
+		else {
+		     $j(".revised").show();	
+		}
+	});
+	
+});
+</script>
+
 <h2>
 	<spring:message code="encounteralerts.viewer" />
 </h2>
@@ -117,24 +132,37 @@ function changeTab(tabObj) {
 			<c:forEach var="encounterAlert" items="${encounterAlertList}">
 				<div id="alert${encounterAlert.id}" >
 					
-					<b class="boxHeader"><spring:message code="encounteralerts.viewer.list"/></b>
-					<div class="box">
+					<b class="boxHeader">
+						<spring:message code="encounteralerts.viewer.list"/>
+						<label for="hideRevised" style="float: right;">
+							<spring:message code="encounteralerts.viewer.hideRevised"/>
+						</label>
+						<input type="checkbox" style="float: right;" id="hideRevised">						
+					</b>
+					<div class="box">				
 					<c:choose>
 						<c:when test="${fn:length(encounterListByAlert[encounterAlert]) > 0}">
-							<table class="encounterList" width="100%">
+							<table class="encounterList" style="width:100%">
 								<tr>
-									<th><spring:message code="general.name" /></th>
-									<th><spring:message code="Encounter.datetime" /></th>
-									<th><spring:message code="Encounter.location" /></th>
-									<th><spring:message code="Encounter.type"/></th>
-									<th><spring:message code="encounteralerts.viewer.state" /></th>
-									<th><spring:message code="Encounter.title" /></th>
+									<th style="width:30%"><spring:message code="general.name" /></th>
+									<th style="width:15%"><spring:message code="Encounter.datetime" /></th>
+									<th style="width:20%"><spring:message code="Encounter.location" /></th>
+									<th style="width:15%"><spring:message code="Encounter.type"/></th>
+									<th style="width:10%"><spring:message code="encounteralerts.viewer.state" /></th>
+									<th style="width:10%"><spring:message code="Encounter.title" /></th>
 								</tr>	
 							
 								<c:forEach var="encounter" items="${encounterListByAlert[encounterAlert]}">
-									<tr>
+									<c:choose>
+										<c:when test="${encounter.state == 1 }">
+											<tr class="pending">
+										</c:when>
+										<c:otherwise>
+											<tr class="revised">
+										</c:otherwise>
+									</c:choose>	
 										<td>${encounter.encounter.patient.personName }</td>
-										<td>${encounter.encounter.encounterDatetime }</td>
+										<td>${fn:split(encounter.encounter.encounterDatetime, ' ')[0]}</td>
 										<td>${encounter.encounter.location }</td>
 										<td>${encounter.encounter.encounterType.name }</td>
 										<c:choose>
