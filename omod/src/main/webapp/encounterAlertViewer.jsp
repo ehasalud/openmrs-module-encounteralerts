@@ -49,6 +49,11 @@ table.encounterList td{
 	border-width: 2px;
 	border-color: #666666;
 }
+
+table.encounterList tbody tr:hover{
+	 background-color: #d8daf9;
+	 cursor: pointer
+}
 -->
 </style>
 
@@ -60,7 +65,8 @@ $j(document).ready(function() {
 	if (tabs.length && tabs[0].id){
 		var c = tabs[0].id;
 		changeTab(c);
-	}	
+	}
+
 });
 
 function changeTab(tabObj) {
@@ -104,6 +110,16 @@ $j(document).ready(function () {
 });
 </script>
 
+<script>
+$j(document).ready(function () {
+	
+	$j(".clickableRow").click(function() {
+        window.document.location = $j(this).attr("href");
+  	});
+  	
+});
+</script>
+
 <h2>
 	<spring:message code="encounteralerts.viewer" />
 </h2>
@@ -129,54 +145,55 @@ $j(document).ready(function () {
 <div id="alertContent">
 	<c:choose>
 		<c:when test="${fn:length(encounterAlertList) > 0}">
+			<b class="boxHeader">
+				<spring:message code="encounteralerts.viewer.list"/>
+				<label for="hideRevised" style="float: right;">
+					<spring:message code="encounteralerts.viewer.hideRevised"/>
+				</label>
+				<input type="checkbox" style="float: right;" id="hideRevised">						
+			</b>
 			<c:forEach var="encounterAlert" items="${encounterAlertList}">
 				<div id="alert${encounterAlert.id}" >
-					
-					<b class="boxHeader">
-						<spring:message code="encounteralerts.viewer.list"/>
-						<label for="hideRevised" style="float: right;">
-							<spring:message code="encounteralerts.viewer.hideRevised"/>
-						</label>
-						<input type="checkbox" style="float: right;" id="hideRevised">						
-					</b>
 					<div class="box">				
 					<c:choose>
 						<c:when test="${fn:length(encounterListByAlert[encounterAlert]) > 0}">
 							<table class="encounterList" style="width:100%">
-								<tr>
-									<th style="width:30%"><spring:message code="general.name" /></th>
-									<th style="width:15%"><spring:message code="Encounter.datetime" /></th>
-									<th style="width:20%"><spring:message code="Encounter.location" /></th>
-									<th style="width:15%"><spring:message code="Encounter.type"/></th>
-									<th style="width:10%"><spring:message code="encounteralerts.viewer.state" /></th>
-									<th style="width:10%"><spring:message code="Encounter.title" /></th>
-								</tr>	
+								<thead>
+									<tr>
+										<th style="width:35%"><spring:message code="general.name" /></th>
+										<th style="width:15%"><spring:message code="Encounter.datetime" /></th>
+										<th style="width:25%"><spring:message code="Encounter.location" /></th>
+										<th style="width:15%"><spring:message code="Encounter.type"/></th>
+										<th style="width:10%"><spring:message code="encounteralerts.viewer.state" /></th>
+									</tr>
+								</thead>
 							
-								<c:forEach var="encounter" items="${encounterListByAlert[encounterAlert]}">
-									<c:choose>
-										<c:when test="${encounter.state == 1 }">
-											<tr class="pending">
-										</c:when>
-										<c:otherwise>
-											<tr class="revised">
-										</c:otherwise>
-									</c:choose>	
-										<td>${encounter.encounter.patient.personName }</td>
-										<td>${fn:split(encounter.encounter.encounterDatetime, ' ')[0]}</td>
-										<td>${encounter.encounter.location }</td>
-										<td>${encounter.encounter.encounterType.name }</td>
+								<tbody>
+									<c:forEach var="encounter" items="${encounterListByAlert[encounterAlert]}">
 										<c:choose>
 											<c:when test="${encounter.state == 1 }">
-												<td bgcolor="#EF6464"><spring:message code="encounteralerts.viewer.pending" /></td>
+												<tr class="pending clickableRow" href="../../module/htmlformentry/htmlFormEntry.form?encounterId=${encounter.encounter.id}">
 											</c:when>
 											<c:otherwise>
-												<td bgcolor="#4CFA75"><spring:message code="encounteralerts.viewer.checked" /></td>
+												<tr class="revised clickableRow" href="../../module/htmlformentry/htmlFormEntry.form?encounterId=${encounter.encounter.id}">
 											</c:otherwise>
-										</c:choose>
-										<td><a href="../../module/htmlformentry/htmlFormEntry.form?encounterId=${encounter.encounter.id}"><spring:message code="encounteralerts.viewer.linktoencounter" /></a></td>
-									</tr>
-								
-								</c:forEach>
+										</c:choose>	
+											<td>${encounter.encounter.patient.personName }</td>
+											<td>${fn:split(encounter.encounter.encounterDatetime, ' ')[0]}</td>
+											<td>${encounter.encounter.location }</td>
+											<td>${encounter.encounter.encounterType.name }</td>
+											<c:choose>
+												<c:when test="${encounter.state == 1 }">
+													<td bgcolor="#EF6464"><spring:message code="encounteralerts.viewer.pending" /></td>
+												</c:when>
+												<c:otherwise>
+													<td bgcolor="#4CFA75"><spring:message code="encounteralerts.viewer.checked" /></td>
+												</c:otherwise>
+											</c:choose>
+										</tr>
+									
+									</c:forEach>
+								</tbody>
 							</table>
 						</c:when>
 						<c:otherwise>
