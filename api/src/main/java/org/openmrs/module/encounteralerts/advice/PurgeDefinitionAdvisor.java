@@ -45,7 +45,8 @@ public class PurgeDefinitionAdvisor  extends StaticMethodMatcherPointcutAdvisor 
 			// Identify definition
 			for(Object arg : invocation.getArguments()){
 				if(EncounterQuery.class.isAssignableFrom(arg.getClass())){
-					Context.getService(EncounterAlertsService.class).retireAlertsWithQuery((EncounterQuery)arg);
+					EncounterAlertsService eaService = Context.getService(EncounterAlertsService.class);
+					eaService.retireAlertsWithQuery((EncounterQuery)arg);
 				}
 			}
 			return invocation.proceed();

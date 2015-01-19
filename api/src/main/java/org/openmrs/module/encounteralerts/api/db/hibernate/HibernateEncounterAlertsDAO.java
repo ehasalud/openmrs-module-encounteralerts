@@ -60,16 +60,28 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 
 	@Override
 	public void updateEncounterAlert(EncounterAlert encounterAlert) throws DAOException {
+		if (encounterAlert.isRetired()){
+			encounterAlert.setRetired(false);
+			encounterAlert.setRetiredBy(null);
+			encounterAlert.setRetireReason(null);
+		}
+		
 		getSessionFactory().getCurrentSession().update(encounterAlert);
+		
+		/** If this encounterAlert is assigned, unretired the assignments */		
+		List<EncounterAlertToRole> encounterAlertsToRole = this.getEncounterAlertsToRoleByAlert(encounterAlert);
+		
+		for (EncounterAlertToRole ear : encounterAlertsToRole){
+			ear.setRetired(false);
+			ear.setRetiredBy(null);
+			ear.setRetireReason(null);
+		}
 		
 	}
 
 	@Override
 	public void deleteEncounterAlert(EncounterAlert encounterAlert) throws DAOException {
-		List<EncounterAlertToRole> ear = getSessionFactory().getCurrentSession()
-			.createQuery("FROM EncounterAlertToRole WHERE encounterAlert=:encounterAlert")
-			.setParameter("encounterAlert", encounterAlert)
-			.list();
+		List<EncounterAlertToRole> ear = this.getEncounterAlertsToRoleByAlert(encounterAlert);
 
 		for (EncounterAlertToRole e : ear){
 			e.setRetired(true);
@@ -108,6 +120,12 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 
 	@Override
 	public void updateEncounterAlertToRole(EncounterAlertToRole alert) throws DAOException {
+		// Check if encounterAlertToRole is retired
+		if (alert.isRetired()){
+			alert.setRetired(false);
+			alert.setRetiredBy(null);
+			alert.setRetireReason(null);
+		}
 		getSessionFactory().getCurrentSession().update(alert);
 		
 	}
@@ -122,11 +140,19 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 	public List<EncounterAlertToRole> getAllEncounterAlertsToRole() throws DAOException {
 		return getSessionFactory().getCurrentSession().createQuery("from EncounterAlertToRole").list();
 	}
-
+	
 	@Override
 	public EncounterAlertToRole getEncounterAlertToRole(Integer id) throws DAOException {
 		return (EncounterAlertToRole) getSessionFactory().getCurrentSession()
 				.get(EncounterAlertToRole.class, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<EncounterAlertToRole> getEncounterAlertsToRoleByAlert(EncounterAlert encounterAlert){
+		return getSessionFactory().getCurrentSession()
+		.createQuery("FROM EncounterAlertToRole WHERE encounterAlert=:encounterAlert")
+		.setParameter("encounterAlert", encounterAlert)
+		.list();
 	}
 
 	@Override
@@ -142,15 +168,8 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 
 	@Override
 	public void retireAlertsWithQuery(EncounterQuery eq) {
-		
-		/** Create a SerializedObject with the same uuid*/
-		SerializedObject so = new SerializedObject();
-		so.setUuid(eq.getUuid());
-		Query selectQuery = getSessionFactory().getCurrentSession()
-				.createQuery("FROM EncounterAlert EA WHERE (EA.upQuery=:query OR EA.downQuery=:query)");
-		selectQuery.setParameter("query", so);
-		
-		List<EncounterAlert> encountersAlerts = selectQuery.list();
+				
+		List<EncounterAlert> encountersAlerts = this.getAlertsWithQuery(eq);
 		
 		for (EncounterAlert ea : encountersAlerts){
 			ea.setRetired(true);
@@ -166,6 +185,19 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 		for (EncounterAlertToRole ear : encounterAlertsToRole){
 			ear.setRetired(true);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<EncounterAlert> getAlertsWithQuery (EncounterQuery eq){
+		
+		/** Create a SerializedObject with the same uuid*/
+		SerializedObject so = new SerializedObject();
+		so.setUuid(eq.getUuid());
+		Query selectQuery = getSessionFactory().getCurrentSession()
+				.createQuery("FROM EncounterAlert EA WHERE (EA.upQuery=:query OR EA.downQuery=:query)");
+		selectQuery.setParameter("query", so);
+		
+		return selectQuery.list();
 	}
 
 }
