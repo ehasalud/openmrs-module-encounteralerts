@@ -171,6 +171,10 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 				
 		List<EncounterAlert> encountersAlerts = this.getAlertsWithQuery(eq);
 		
+		if (encountersAlerts == null || encountersAlerts.size() == 0){
+			return;
+		}
+		
 		for (EncounterAlert ea : encountersAlerts){
 			ea.setRetired(true);
 		}
