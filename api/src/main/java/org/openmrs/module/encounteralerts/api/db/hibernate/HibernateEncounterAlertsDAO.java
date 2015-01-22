@@ -14,6 +14,7 @@
 
 package org.openmrs.module.encounteralerts.api.db.hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -103,11 +104,16 @@ public class HibernateEncounterAlertsDAO implements EncounterAlertsDAO {
 
 	@Override
 	public List<EncounterAlert> getEncounterAlertsByRole(Role role, Boolean includeRetired) throws DAOException {
-		Query q = getSessionFactory().getCurrentSession()
-				.createQuery("select encounterAlert from EncounterAlertToRole EAR where EAR.role = :role AND EAR.retired=:retired");
-		q.setEntity("role", role);
-		q.setParameter("retired", includeRetired);
-		List<EncounterAlert> alerts = q.list();
+		Criteria crit = getSessionFactory().getCurrentSession().createCriteria(EncounterAlertToRole.class);
+		crit.add(Restrictions.eq("role", role));
+		if (!includeRetired){
+			crit.add(Restrictions.eq("retired", false));
+		}
+		
+		List<EncounterAlert> alerts = new ArrayList<EncounterAlert>();
+		for (EncounterAlertToRole alert : (List<EncounterAlertToRole>) crit.list()){
+			alerts.add(alert.getEncounterAlert());
+		}
 
 		return alerts;
 	}

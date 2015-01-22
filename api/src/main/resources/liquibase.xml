@@ -51,36 +51,6 @@
         
     </changeSet>
     
-    <!--  
-    <changeSet author="vgarciabnz" id="encounteralerts_20140731_1242">
-        
-        <preConditions onFail="MARK_RAN">
-            <not><tableExists tableName="encounter_alert_users"/></not>
-        </preConditions>
-        
-        <createTable tableName="encounter_alert_users">
-            
-            <column name="encounter_alert_users_id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            
-            <column name="encounter_alert_id" type="int">
-                <constraints nullable="false"/>
-            </column>
-            
-            <column name="user" type="VARCHAR(50)">
-            	<constraints nullable="false"/>
-           	</column>
-            
-            <column name="uuid" type="VARCHAR(36)">
-            	<constraints nullable="false"/>
-           	</column>
-            
-        </createTable>
-        
-    </changeSet>
-    -->
-    
     <changeSet author="vgarciabnz" id="encounteralerts_20140731_1250">
         
         <preConditions onFail="MARK_RAN">
@@ -128,6 +98,24 @@
         <addColumn tableName="encounter_alert_roles">
             <column name="retired" type="BOOLEAN"></column>
         </addColumn>
+    </changeSet>
+    
+    <changeSet author="vgarciabnz" id="encounteralerts_20150122_1504">
+    	<preConditions onFail="MARK_RAN">
+    		<columnExists tableName="encounter_alert" columnName="retired"/>
+    	</preConditions>
+    	
+    	<addDefaultValue tableName="encounter_alert" columnName="retired"
+    	defaultValueBoolean="false"/>
+    </changeSet>
+    
+    <changeSet author="vgarciabnz" id="encounteralerts_20150122_1505">
+    	<preConditions onFail="MARK_RAN">
+    		<columnExists tableName="encounter_alert_roles" columnName="retired"/>
+    	</preConditions>
+    	
+    	<addDefaultValue tableName="encounter_alert_roles" columnName="retired"
+    	defaultValueBoolean="false"/>
     </changeSet>
     
 </databaseChangeLog>
