@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<role role="Alerted" description="Test role for EncounterAlerts" uuid="dee56f62-a14b-11e4-89d3-123b93f75cba"/>
+	<encounter_alert_roles encounter_alert_roles_id="1" encounter_alert_uuid="279d398c-fb18-486f-b2dc-6097ad750d6a" role="Alerted" retired="false" uuid="e4829156-70e0-464c-b163-99b84d1d964b" />
+	<encounter_alert_roles encounter_alert_roles_id="2" encounter_alert_uuid="3c5dee65-9e72-414b-9b17-13d3c1964d93" role="Alerted" retired="true" uuid="876971be-08fb-4f6a-acb6-f475afc4ab0c" />
+	<encounter_alert_roles encounter_alert_roles_id="3" encounter_alert_uuid="279d398c-fb18-486f-b2dc-6097ad750d6a" role="Provider" retired="false" uuid="5f7ffd46-6c03-4728-a4e8-9034f4f927cb" />
+</dataset>
