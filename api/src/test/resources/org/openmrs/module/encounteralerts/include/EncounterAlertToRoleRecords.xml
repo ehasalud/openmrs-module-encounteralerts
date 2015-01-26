@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  	<users user_id="10" person_id="10" system_id="10" username="testuser" password="cb9be5d87565e6193daf750fb0fdc397ab75b428f0fb6a91174c4fd06bf4357596e19b2af9bf4bc4ed864b6e116a568f79d0d6236eec61514354abb1f7ad093e" salt="c3f0fcdfcb6f0b79b8f942c7b9974e403b943bb8c02792f78c051e35b698d61706367c884b29d2a1ad8d14409e49dab15c7ab51fe4f8e0aa64481444e203aef6" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="3e44c2f5-78f0-411e-bdf7-d8040ad8bf8e"/>
+	<person person_id="10" gender="" birthdate="1975-06-30" birthdate_estimated="false" dead="false" date_created="2005-01-01 00:00:00.0" voided="false" uuid="b8eb46d5-2cfb-4739-84e4-cd1773b85aea"/>
+	<role role="Alerted" description="Test role for EncounterAlerts" uuid="dee56f62-a14b-11e4-89d3-123b93f75cba"/>
+	<user_role user_id="10" role="Alerted"/>
+	<encounter_alert_roles encounter_alert_roles_id="1" encounter_alert_uuid="279d398c-fb18-486f-b2dc-6097ad750d6a" role="Alerted" retired="false" uuid="e4829156-70e0-464c-b163-99b84d1d964b" />
+	<encounter_alert_roles encounter_alert_roles_id="2" encounter_alert_uuid="3c5dee65-9e72-414b-9b17-13d3c1964d93" role="Alerted" retired="true" uuid="876971be-08fb-4f6a-acb6-f475afc4ab0c" />
+	<encounter_alert_roles encounter_alert_roles_id="3" encounter_alert_uuid="0d4873f5-d516-4a88-b0e9-dceb807258d5" role="Provider" retired="false" uuid="5f7ffd46-6c03-4728-a4e8-9034f4f927cb" />
+</dataset>
