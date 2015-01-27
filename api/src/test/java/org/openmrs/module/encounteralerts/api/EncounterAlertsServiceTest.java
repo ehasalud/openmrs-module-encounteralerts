@@ -21,7 +21,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Role;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.db.SerializedObject;
 import org.openmrs.module.encounteralerts.EncounterAlert;
+import org.openmrs.module.encounteralerts.EvaluatedEncounter;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
@@ -107,5 +109,46 @@ public class  EncounterAlertsServiceTest extends BaseModuleContextSensitiveTest 
 		
 		List<EncounterAlert> activeList = service.getCurrentUserEncounterAlerts(false);
 		Assert.assertEquals(2, activeList.size());
+	}
+	
+	@Test
+	public void shouldGetAllEncounterQueries() throws Exception{
+		executeDataSet("org/openmrs/module/encounteralerts/include/EncounterAlertRecords.xml");
+		executeDataSet("org/openmrs/module/encounteralerts/include/EncounterAlertToRoleRecords.xml");
+		executeDataSet("org/openmrs/module/encounteralerts/include/SerializedObjects.xml");
+		
+		EncounterAlertsService service = Context.getService(EncounterAlertsService.class);
+		
+		List<SerializedObject> queries = service.getAllEncounterQueries();
+		Assert.assertEquals(2, queries.size());
+	}
+	
+	@Test
+	public void shouldEvaluateCurrentUserEncounterAlert() throws Exception{
+		executeDataSet("org/openmrs/module/encounteralerts/include/EncounterAlertRecords.xml");
+		executeDataSet("org/openmrs/module/encounteralerts/include/EncounterAlertToRoleRecords.xml");
+		executeDataSet("org/openmrs/module/encounteralerts/include/SerializedObjects.xml");
+
+		Context.authenticate("testuser", "Testuser123");
+
+		EncounterAlertsService service = Context.getService(EncounterAlertsService.class);
+		
+		List<EncounterAlert> activeAlerts = service.getCurrentUserEncounterAlerts(false);
+		Assert.assertEquals(1, activeAlerts.size());
+		
+		List<EvaluatedEncounter> encounters = 
+				service.evaluateCurrentUserEncounterAlert(activeAlerts.get(0));
+		Assert.assertEquals(3, encounters.size());
+		
+		int toBeChecked = 0, checked = 0;
+		for( EvaluatedEncounter encounter : encounters){
+			if( encounter.getState().equals(EvaluatedEncounter.TO_BE_CHECKED))
+				toBeChecked++;
+			if( encounter.getState().equals(EvaluatedEncounter.CHECKED))
+				checked++;
+		}
+		
+		Assert.assertEquals(1, toBeChecked);
+		Assert.assertEquals(2, checked);
 	}
 }
