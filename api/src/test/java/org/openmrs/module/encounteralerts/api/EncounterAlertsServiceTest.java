@@ -151,4 +151,44 @@ public class  EncounterAlertsServiceTest extends BaseModuleContextSensitiveTest 
 		Assert.assertEquals(1, toBeChecked);
 		Assert.assertEquals(2, checked);
 	}
+	
+	/**
+	 * This test verifies that encounters are marked as CHECKED only if they are  
+	 * also marked as TO_BE_CHECKED. This is to prevent alerting us about 
+	 * CHECKED encounters that we don't expect to be alerted about. 
+	 * @throws Exception 
+	 */
+	@Test
+	public void shouldEvaluateCurrentUserAlert_includeAsCheckedOnlyIfAlsoUnchecked() throws Exception{
+		executeDataSet("org/openmrs/module/encounteralerts/include/EncounterAlertRecords.xml");
+		executeDataSet("org/openmrs/module/encounteralerts/include/EncounterAlertToRoleRecords.xml");
+		executeDataSet("org/openmrs/module/encounteralerts/include/SerializedObjects.xml");
+
+		Context.authenticate("testuser", "Testuser123");
+		
+		Context.getAuthenticatedUser().removeRole(Context.getUserService().getRole("Alerted"));
+		Context.getAuthenticatedUser().addRole(Context.getUserService().getRole("Provider"));
+
+		EncounterAlertsService service = Context.getService(EncounterAlertsService.class);
+		
+		List<EncounterAlert> activeAlerts = service.getCurrentUserEncounterAlerts(false);
+		Assert.assertEquals(1, activeAlerts.size());
+		Assert.assertEquals("0d4873f5-d516-4a88-b0e9-dceb807258d5", activeAlerts.get(0).getUuid());
+		
+		List<EvaluatedEncounter> encounters = 
+				service.evaluateCurrentUserEncounterAlert(activeAlerts.get(0));
+		Assert.assertEquals(2, encounters.size());
+		
+		int toBeChecked = 0, checked = 0;
+		for( EvaluatedEncounter encounter : encounters){
+			if( encounter.getState().equals(EvaluatedEncounter.TO_BE_CHECKED))
+				toBeChecked++;
+			if( encounter.getState().equals(EvaluatedEncounter.CHECKED))
+				checked++;
+		}
+		
+		Assert.assertEquals(0, toBeChecked);
+		Assert.assertEquals(2, checked);
+		
+	}
 }

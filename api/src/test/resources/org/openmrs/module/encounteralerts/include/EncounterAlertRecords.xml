@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<encounter_alert encounter_alert_id="1" name="first alert" description="first alert" up_query="fa8b53a8-7828-4e37-8700-174171357993" down_query="fa8b53a8-7828-4e37-8700-174171357993" creator="1" date_created="2014-12-17 09:43:10" retired="false" uuid="0d4873f5-d516-4a88-b0e9-dceb807258d5" />
+	<encounter_alert encounter_alert_id="1" name="first alert" description="first alert" up_query="042f4666-8785-4d2e-bf9f-3b23ef3d2bb6" down_query="6cd5759f-1be2-49b0-a09f-af022bd26da8" creator="1" date_created="2014-12-17 09:43:10" retired="false" uuid="0d4873f5-d516-4a88-b0e9-dceb807258d5" />
 	<encounter_alert encounter_alert_id="2" name="second alert" description="second alert" up_query="6cd5759f-1be2-49b0-a09f-af022bd26da8" down_query="042f4666-8785-4d2e-bf9f-3b23ef3d2bb6" creator="1" date_created="2014-12-17 09:43:10" retired="false" uuid="279d398c-fb18-486f-b2dc-6097ad750d6a" />
 	<encounter_alert encounter_alert_id="3" name="third alert" description="third alert" up_query="ad74a807-b3d0-4bbc-afed-1a758fc96123" down_query="14fe90c8-69d0-49ca-a163-5a0b25ae17e5" creator="1" date_created="2014-12-17 09:43:10" retired="true" uuid="3c5dee65-9e72-414b-9b17-13d3c1964d93" />
 </dataset>
