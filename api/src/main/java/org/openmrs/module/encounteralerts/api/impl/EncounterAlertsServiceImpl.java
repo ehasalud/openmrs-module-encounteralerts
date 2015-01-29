@@ -186,6 +186,7 @@ public class EncounterAlertsServiceImpl extends BaseOpenmrsService implements En
 				
 				EncounterQueryResult downResult = eqService.evaluate(downQuery, null);
 				
+				downResult.getMemberIds().retainAll(upResult.getMemberIds());
 				upResult.getMemberIds().removeAll(downResult.getMemberIds());
 				
 				for (Integer i : downResult.getMemberIds()){
