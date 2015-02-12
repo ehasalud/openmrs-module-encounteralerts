@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>encounteralerts</artifactId>
-	<version>1.1</version>
+	<version>1.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Encounter Alerts Module</name>
 	<description>Allow to set a lof encounters that must be revised.</description>
@@ -22,9 +22,10 @@
 	</organization>
 
 	<scm>
-		<connection>scm:svn:https://svn.openmrs.org/openmrs-modules/encounteralerts/trunk/</connection>
-		<developerConnection>scm:svn:https://svn.openmrs.org/openmrs-modules/encounteralerts/trunk/</developerConnection>
-		<url>https://svn.openmrs.org/openmrs-modules/encounteralerts/trunk/</url>
+		<connection>scm:git:https://github.com/ehasalud/openmrs-module-encounteralerts/</connection>
+		<developerConnection>scm:git:https://github.com/ehasalud/openmrs-module-encounteralerts/</developerConnection>
+		<url>https://github.com/ehasalud/openmrs-module-encounteralerts</url>
+		<tag>HEAD</tag>
 	</scm>
 
 	<modules>
