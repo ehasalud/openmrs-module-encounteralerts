@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>encounteralerts</artifactId>
-	<version>1.2</version>
+	<version>1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Encounter Alerts Module</name>
 	<description>Allow to set a lof encounters that must be revised.</description>
