@@ -4,7 +4,7 @@
 <!--
 
 #alertTabs {
-font-size: 0.8em;
+	font-size: 0.8em;
 	margin: 10px auto 7px auto;
 	padding-top: 5px;
 	padding-left: 5px;
@@ -97,21 +97,6 @@ function changeTab(tabObj) {
 
 <script>
 $j(document).ready(function () {
-
-	$j("#hideRevised").change(function () {
-		if($j(this).is(':checked')){
-		     $j(".revised").hide();	
-		}
-		else {
-		     $j(".revised").show();	
-		}
-	});
-	
-});
-</script>
-
-<script>
-$j(document).ready(function () {
 	
 	$j(".clickableRow").click(function() {
         window.document.location = $j(this).attr("href");
@@ -146,11 +131,7 @@ $j(document).ready(function () {
 	<c:choose>
 		<c:when test="${fn:length(encounterAlertList) > 0}">
 			<b class="boxHeader">
-				<spring:message code="encounteralerts.viewer.list"/>
-				<label for="hideRevised" style="float: right;">
-					<spring:message code="encounteralerts.viewer.hideRevised"/>
-				</label>
-				<input type="checkbox" style="float: right;" id="hideRevised">						
+				<spring:message code="encounteralerts.viewer.list"/>						
 			</b>
 			<c:forEach var="encounterAlert" items="${encounterAlertList}">
 				<div id="alert${encounterAlert.id}" >
@@ -162,12 +143,12 @@ $j(document).ready(function () {
 									<tr>
 										<th style="width:35%"><spring:message code="general.name" /></th>
 										<th style="width:15%"><spring:message code="Encounter.datetime" /></th>
-										<th style="width:25%"><spring:message code="Encounter.location" /></th>
+										<!-- <th style="width:15%"><spring:message code="Especialista" /></th> -->
+										<th style="width:20%"><spring:message code="Encounter.location" /></th>
+										<th style="width:10%"><spring:message code="Departamento" /></th>
 										<th style="width:15%"><spring:message code="Encounter.type"/></th>
-										<th style="width:10%"><spring:message code="encounteralerts.viewer.state" /></th>
 									</tr>
 								</thead>
-							
 								<tbody>
 									<c:forEach var="encounter" items="${encounterListByAlert[encounterAlert]}">
 										<c:choose>
@@ -180,20 +161,29 @@ $j(document).ready(function () {
 										</c:choose>	
 											<td>${encounter.encounter.patient.personName }</td>
 											<td>${fn:split(encounter.encounter.encounterDatetime, ' ')[0]}</td>
+											<%-- <c:set var="lastperson" scope="session" value=""/>
+											<c:forEach var="observation" items="${ encounter.encounter.obs }">
+												<c:if test="${observation.concept.conceptId eq 161}">
+													<c:set var="lastperson" scope="session" value="${ observation.creator }"/>
+												</c:if>
+											</c:forEach>
+											<td><c:out value="${lastperson}"/></td> --%>
 											<td>${encounter.encounter.location }</td>
-											<td>${encounter.encounter.encounterType.name }</td>
 											<c:choose>
-												<c:when test="${encounter.state == 1 }">
-													<td bgcolor="#EF6464"><spring:message code="encounteralerts.viewer.pending" /></td>
+												<c:when test='${ encounter.encounter.patient.personAddress.stateProvince == "16 Alta Verapaz" }'>
+													<td bgcolor="#7FFFD4"><spring:message code="Alta Verapaz" /></td>
 												</c:when>
 												<c:otherwise>
-													<td bgcolor="#4CFA75"><spring:message code="encounteralerts.viewer.checked" /></td>
+													<td bgcolor="#4CFA75"><spring:message code="San Marcos" /></td>
 												</c:otherwise>
 											</c:choose>
+											<td>${encounter.encounter.encounterType.name }</td>
 										</tr>
-									
 									</c:forEach>
 								</tbody>
+								<tfoot>
+<%-- 									${ encounterListByAlert[encounterAlert][1].encounter.encounterId } --%>
+								</tfoot>
 							</table>
 						</c:when>
 						<c:otherwise>
